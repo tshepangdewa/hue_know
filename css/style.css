@@ -147,6 +147,13 @@ summary:focus-visible {
   margin-bottom: 16px;
 }
 
+.dropzone-empty,
+.dropzone-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .dropzone-label {
   margin: 0 0 4px;
   color: var(--text);
@@ -157,6 +164,29 @@ summary:focus-visible {
   font-size: 0.85rem;
   color: var(--text-muted);
   font-family: var(--font-mono);
+}
+
+.preview-image {
+  max-width: 100%;
+  max-height: 180px;
+  border-radius: calc(var(--radius) - 4px);
+  margin-bottom: 12px;
+  border: 1px solid var(--border);
+}
+
+.preview-filename {
+  margin: 0 0 4px;
+  color: var(--text);
+  font-weight: 600;
+  font-size: 0.92rem;
+  word-break: break-all;
+}
+
+.dropzone-error {
+  margin: 16px 0 0;
+  color: #C0392B;
+  font-size: 0.88rem;
+  text-align: center;
 }
 
 /* ---- How it works ---- */

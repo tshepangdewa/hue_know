@@ -27,19 +27,29 @@
   <section class="hero">
     <div class="wrap hero-inner">
       <h1>Every image has a palette.<br>HueKnow finds it.</h1>
-      <p class="hero-sub">Drop in a photo and see its dominant colors broken down by name, hex code, and share of the image.</p>
+      <p class="hero-sub">Drop in a photo and see its dominant colors broken down by name, hex code, and share of the image. Everything is processed in your browser, so nothing is ever uploaded anywhere.</p>
 
       <div class="results-toggle">
         <button type="button" class="toggle-btn is-active" data-view="bubbles">Bubbles</button>
         <button type="button" class="toggle-btn" data-view="bars">Bars</button>
       </div>
 
-      <div class="dropzone" id="dropzone" tabindex="0">
+      <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Upload an image">
         <input type="file" id="file-input" accept="image/*" class="visually-hidden">
-        <div class="dropzone-icon" aria-hidden="true">+</div>
-        <p class="dropzone-label">Upload or drag &amp; drop an image</p>
-        <p class="dropzone-meta">JPG, PNG, or WEBP · stays on your device</p>
+
+        <div class="dropzone-empty" id="dropzone-empty">
+          <div class="dropzone-icon" aria-hidden="true">+</div>
+          <p class="dropzone-label">Upload or drag &amp; drop an image</p>
+          <p class="dropzone-meta">JPG, PNG, or WEBP · stays on your device</p>
+        </div>
+
+        <div class="dropzone-preview" id="dropzone-preview" hidden>
+          <img id="preview-image" class="preview-image" alt="">
+          <p class="preview-filename" id="preview-filename"></p>
+          <p class="dropzone-meta">Click or drop to use a different image</p>
+        </div>
       </div>
+      <p class="dropzone-error" id="dropzone-error" hidden>That file doesn't look like an image. Try a JPG, PNG, or WEBP.</p>
     </div>
   </section>
 
