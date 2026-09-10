@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>hue_know — find the dominant colors in any image</title>
+<title>HueKnow: find the dominant colors in any image</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
@@ -13,10 +13,10 @@
 
 <header class="site-header">
   <div class="wrap header-inner">
-    <a href="#" class="logo">hue<span class="logo-dot">_</span>know</a>
+    <a href="#" class="logo">Hue<span class="logo-dot">Know</span></a>
     <nav class="site-nav">
       <a href="#how-it-works">How it works</a>
-      <a href="#why">Why hue_know</a>
+      <a href="#why">Why HueKnow</a>
       <a href="#faq">FAQ</a>
     </nav>
   </div>
@@ -26,24 +26,19 @@
 
   <section class="hero">
     <div class="wrap hero-inner">
-      <div class="hero-text">
-        <h1>Every image has a palette.<br>hue_know finds it.</h1>
-        <p class="hero-sub">Drop in a photo and see its dominant colors broken down by name, hex code, and share of the image — all processed in your browser, nothing uploaded anywhere.</p>
+      <h1>Every image has a palette.<br>HueKnow finds it.</h1>
+      <p class="hero-sub">Drop in a photo and see its dominant colors broken down by name, hex code, and share of the image. Everything is processed in your browser, so nothing is ever uploaded anywhere.</p>
 
-        <div class="dropzone" id="dropzone" tabindex="0">
-          <input type="file" id="file-input" accept="image/*" class="visually-hidden">
-          <div class="dropzone-icon" aria-hidden="true">+</div>
-          <p class="dropzone-label">Upload or drag &amp; drop an image</p>
-          <p class="dropzone-meta">JPG, PNG, or WEBP · stays on your device</p>
-        </div>
+      <div class="results-toggle">
+        <button type="button" class="toggle-btn is-active" data-view="bubbles">Bubbles</button>
+        <button type="button" class="toggle-btn" data-view="bars">Bars</button>
       </div>
 
-      <div class="hero-visual" aria-hidden="true">
-        <div class="float-circle fc-1"></div>
-        <div class="float-circle fc-2"></div>
-        <div class="float-circle fc-3"></div>
-        <div class="float-circle fc-4"></div>
-        <div class="float-circle fc-5"></div>
+      <div class="dropzone" id="dropzone" tabindex="0">
+        <input type="file" id="file-input" accept="image/*" class="visually-hidden">
+        <div class="dropzone-icon" aria-hidden="true">+</div>
+        <p class="dropzone-label">Upload or drag &amp; drop an image</p>
+        <p class="dropzone-meta">JPG, PNG, or WEBP · stays on your device</p>
       </div>
     </div>
   </section>
@@ -56,14 +51,14 @@
           <span class="step-index">1</span>
           <div>
             <h3>Upload an image</h3>
-            <p>Choose any photo from your device — nothing leaves your browser.</p>
+            <p>Choose any photo from your device, nothing leaves your browser.</p>
           </div>
         </li>
         <li class="step">
           <span class="step-index">2</span>
           <div>
             <h3>We read every pixel</h3>
-            <p>hue_know scans the image and groups its colors into a handful of dominant tones.</p>
+            <p>HueKnow scans the image and groups its colors into a handful of dominant tones.</p>
           </div>
         </li>
         <li class="step">
@@ -86,7 +81,7 @@
 
   <section class="why" id="why">
     <div class="wrap">
-      <h2>Why hue_know</h2>
+      <h2>Why HueKnow</h2>
       <div class="feature-grid">
         <div class="feature">
           <h3>Runs entirely in your browser</h3>
@@ -94,7 +89,7 @@
         </div>
         <div class="feature">
           <h3>Instant results</h3>
-          <p>No waiting on uploads or processing queues — your palette appears the moment the image loads.</p>
+          <p>No waiting on uploads or processing queues, your palette appears the moment the image loads.</p>
         </div>
         <div class="feature">
           <h3>No account needed</h3>
@@ -108,26 +103,13 @@
     </div>
   </section>
 
-  <section class="results" id="results">
-    <div class="wrap">
-      <h2>Your palette</h2>
-      <div class="results-toggle">
-        <button type="button" class="toggle-btn is-active" data-view="bubbles">Bubbles</button>
-        <button type="button" class="toggle-btn" data-view="bars">Bars</button>
-      </div>
-      <div class="results-canvas" id="results-canvas">
-        <p class="results-empty">Upload an image above to see its dominant colors here.</p>
-      </div>
-    </div>
-  </section>
-
   <section class="faq" id="faq">
     <div class="wrap">
       <h2>Frequently asked questions</h2>
       <div class="faq-list">
         <details class="faq-item">
           <summary>Is my image uploaded anywhere?</summary>
-          <p>No. Everything runs locally in your browser using the Canvas API — your image never leaves your device.</p>
+          <p>No. Everything runs locally in your browser using the Canvas API, your image never leaves your device.</p>
         </details>
         <details class="faq-item">
           <summary>What file types are supported?</summary>
@@ -139,7 +121,7 @@
         </details>
         <details class="faq-item">
           <summary>Can I use this for a design palette?</summary>
-          <p>Yes — click any swatch to copy its hex code, then drop it straight into your design tool of choice.</p>
+          <p>Yes. Click any swatch to copy its hex code, then drop it straight into your design tool of choice.</p>
         </details>
       </div>
     </div>
@@ -149,7 +131,7 @@
 
 <footer class="site-footer">
   <div class="wrap footer-inner">
-    <p>hue_know — a color-detection project.</p>
+    <p>HueKnow, a color detection project.</p>
     <p><a href="#">GitHub</a></p>
   </div>
 </footer>
