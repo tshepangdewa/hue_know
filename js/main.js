@@ -70,9 +70,34 @@ document.addEventListener('DOMContentLoaded', () => {
       previewFilename.textContent = file.name;
       dropzoneEmpty.hidden = true;
       dropzonePreview.hidden = false;
-      // Canvas pipeline and color extraction are wired up in later steps.
     };
     reader.readAsDataURL(file);
+
+    analyzeImage(file);
+  }
+
+  // Runs the canvas -> extraction -> naming pipeline and stores the result
+  // on window.currentPalette for the bubble/bar views (wired up in later steps).
+  async function analyzeImage(file) {
+    try {
+      const imageData = await ImageLoader.loadImageToCanvas(file);
+      const rawColors = ColorExtractor.extractColors(imageData, 6);
+
+      const palette = rawColors
+        .map(({ r, g, b, percentage }) => ({
+          hex: ColorUtils.rgbToHex(r, g, b),
+          name: ColorUtils.nearestColorName(r, g, b),
+          percentage,
+        }))
+        .sort((a, b) => b.percentage - a.percentage);
+
+      window.currentPalette = palette;
+      // Bubble/bar rendering picks this up in a later step.
+      console.log('Extracted palette:', palette);
+    } catch (err) {
+      console.error('Color extraction failed:', err);
+      showError();
+    }
   }
 
   function showError() {
