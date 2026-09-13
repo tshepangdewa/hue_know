@@ -27,7 +27,7 @@
   <section class="hero">
     <div class="wrap hero-inner">
       <h1>Every image has a palette.<br>HueKnow finds it.</h1>
-      <p class="hero-sub">Drop in a photo and see its dominant colors broken down by name, hex code, and share of the image. Everything is processed in your browser, so nothing is ever uploaded anywhere.</p>
+      <p class="hero-sub">Drop in a photo and see its dominant colors broken down by name, hex code, and share of the image.</p>
 
       <div class="results-toggle">
   <button type="button" class="toggle-btn is-active" data-view="bubble">Bubbles</button>
@@ -40,7 +40,7 @@
         <div class="dropzone-empty" id="dropzone-empty">
           <div class="dropzone-icon" aria-hidden="true">+</div>
           <p class="dropzone-label">Upload or drag &amp; drop an image</p>
-          <p class="dropzone-meta">JPG, PNG, or WEBP · stays on your device</p>
+          <p class="dropzone-meta">JPG, PNG, or WEBP</p>
         </div>
 
         <div class="dropzone-preview" id="dropzone-preview" hidden>
@@ -68,14 +68,14 @@
           <span class="step-index">1</span>
           <div>
             <h3>Upload an image</h3>
-            <p>Choose any photo from your device, nothing leaves your browser.</p>
+            <<p>Choose any photo from your device to begin the color analysis.</p>
           </div>
         </li>
         <li class="step">
           <span class="step-index">2</span>
           <div>
-            <h3>We read every pixel</h3>
-            <p>HueKnow scans the image and groups its colors into a handful of dominant tones.</p>
+           <h3>We analyze the colors</h3>
+<p>HueKnow analyzes the image and identifies its dominant colors and their share of the image.</p>
           </div>
         </li>
         <li class="step">
@@ -101,13 +101,13 @@
       <h2>Why HueKnow</h2>
       <div class="feature-grid">
         <div class="feature">
-          <h3>Runs entirely in your browser</h3>
-          <p>Images are processed locally using the Canvas API. Nothing is ever uploaded to a server.</p>
-        </div>
-        <div class="feature">
-          <h3>Instant results</h3>
-          <p>No waiting on uploads or processing queues, your palette appears the moment the image loads.</p>
-        </div>
+  <h3>Accurate color analysis</h3>
+  <p>HueKnow uses an image color analysis API to identify dominant colors and provide their names, hex codes, and percentages.</p>
+</div>
+       <div class="feature">
+  <h3>Instant results</h3>
+  <p>No waiting on uploads or processing queues, your palette appears the moment the image loads.</p>
+</div>
         <div class="feature">
           <h3>No account needed</h3>
           <p>Open the page and start. There's nothing to sign up for and nothing to remember.</p>
@@ -125,16 +125,16 @@
       <h2>Frequently asked questions</h2>
       <div class="faq-list">
         <details class="faq-item">
-          <summary>Is my image uploaded anywhere?</summary>
-          <p>No. Everything runs locally in your browser using the Canvas API, your image never leaves your device.</p>
+         <summary>Is my image uploaded anywhere?</summary>
+<p>Yes. HueKnow sends the selected image to its server endpoint for color analysis. Your API credentials are kept securely on the server and are not exposed in the browser.</p>
         </details>
         <details class="faq-item">
           <summary>What file types are supported?</summary>
           <p>JPG, PNG, and WEBP. Transparent areas in PNGs are ignored when calculating the palette.</p>
         </details>
         <details class="faq-item">
-          <summary>How are color names decided?</summary>
-          <p>Each dominant color is converted to HSL and matched against a set of named hue ranges to produce a human-readable label alongside its exact hex code.</p>
+         <summary>How are color names decided?</summary>
+<p>HueKnow uses the color analysis service to identify a human-readable name for each dominant color alongside its exact hex code.</p>
         </details>
         <details class="faq-item">
           <summary>Can I use this for a design palette?</summary>
