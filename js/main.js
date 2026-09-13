@@ -79,26 +79,22 @@ document.addEventListener('DOMContentLoaded', () => {
   // Runs the canvas -> extraction -> naming pipeline and stores the result
   // on window.currentPalette for the bubble/bar views (wired up in later steps).
   async function analyzeImage(file) {
-    try {
-      const imageData = await ImageLoader.loadImageToCanvas(file);
-      const rawColors = ColorExtractor.extractColors(imageData, 6);
+  try {
+    const result = await HueKnowAPI.analyzeImage(file);
 
-      const palette = rawColors
-        .map(({ r, g, b, percentage }) => ({
-          hex: ColorUtils.rgbToHex(r, g, b),
-          name: ColorUtils.nearestColorName(r, g, b),
-          percentage,
-        }))
-        .sort((a, b) => b.percentage - a.percentage);
+    const palette = result.palette
+      .sort((a, b) => b.percentage - a.percentage);
 
-      window.currentPalette = palette;
-      // Bubble/bar rendering picks this up in a later step.
-      console.log('Extracted palette:', palette);
-    } catch (err) {
-      console.error('Color extraction failed:', err);
-      showError();
-    }
+    window.currentPalette = palette;
+
+    console.log('Extracted palette:', palette);
+
+    return palette;
+  } catch (error) {
+    console.error('Analysis failed:', error);
+    throw error;
   }
+}
 
   function showError() {
     dropzoneError.hidden = false;
