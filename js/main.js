@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const previewImage = document.getElementById('preview-image');
   const previewFilename = document.getElementById('preview-filename');
   const dropzoneError = document.getElementById('dropzone-error');
+  const analysisStatus = document.getElementById('analysis-status');
 
   // Clicking/keyboard-activating the dropzone opens the file picker.
   dropzone.addEventListener('click', () => fileInput.click());
@@ -76,25 +77,44 @@ document.addEventListener('DOMContentLoaded', () => {
     analyzeImage(file);
   }
 
-  // Runs the canvas -> extraction -> naming pipeline and stores the result
-  // on window.currentPalette for the bubble/bar views (wired up in later steps).
   async function analyzeImage(file) {
-  try {
-    const result = await HueKnowAPI.analyzeImage(file);
+    try {
+      analysisStatus.textContent = 'Analyzing your image...';
+      analysisStatus.hidden = false;
 
-    const palette = result.palette
-      .sort((a, b) => b.percentage - a.percentage);
+      dropzoneError.hidden = true;
 
-    window.currentPalette = palette;
-renderCurrentView();
-    console.log('Extracted palette:', palette);
+      const result = await HueKnowAPI.analyzeImage(file);
 
-    return palette;
-  } catch (error) {
-    console.error('Analysis failed:', error);
-    throw error;
+      const palette = result.palette
+        .sort((a, b) => b.percentage - a.percentage);
+
+      if (palette.length === 0) {
+        throw new Error('No colors were found in the image.');
+      }
+
+      window.currentPalette = palette;
+
+      renderCurrentView();
+
+      console.log('Extracted palette:', palette);
+
+      analysisStatus.hidden = true;
+
+      return palette;
+    } catch (error) {
+      analysisStatus.hidden = true;
+
+      console.error('Analysis failed:', error);
+
+      dropzoneError.textContent =
+        error.message || 'Something went wrong while analyzing the image.';
+
+      dropzoneError.hidden = false;
+
+      throw error;
+    }
   }
-}
 
   function showError() {
     dropzoneError.hidden = false;
@@ -102,40 +122,40 @@ renderCurrentView();
     dropzonePreview.hidden = true;
   }
 
-  // View toggle buttons (bubbles/bars): chart rendering wired up in later steps.
+  // View toggle buttons.
   const bubbleView = document.querySelector('#bubble-view');
-const barView = document.querySelector('#bar-view');
+  const barView = document.querySelector('#bar-view');
 
-const bubbleButton = document.querySelector('[data-view="bubble"]');
-const barButton = document.querySelector('[data-view="bar"]');
+  const bubbleButton = document.querySelector('[data-view="bubble"]');
+  const barButton = document.querySelector('[data-view="bar"]');
 
-function renderCurrentView() {
-  const palette = window.currentPalette;
+  function renderCurrentView() {
+    const palette = window.currentPalette;
 
-  if (!palette || palette.length === 0) {
-    return;
+    if (!palette || palette.length === 0) {
+      return;
+    }
+
+    if (bubbleButton.classList.contains('is-active')) {
+      BubbleChart.render(palette, bubbleView);
+      barView.innerHTML = '';
+    } else {
+      BarChart.render(palette, barView);
+      bubbleView.innerHTML = '';
+    }
   }
 
-  if (bubbleButton.classList.contains('is-active')) {
-    BubbleChart.render(palette, bubbleView);
-    barView.innerHTML = '';
-  } else {
-    BarChart.render(palette, barView);
-    bubbleView.innerHTML = '';
-  }
-}
+  bubbleButton.addEventListener('click', () => {
+    bubbleButton.classList.add('is-active');
+    barButton.classList.remove('is-active');
 
-bubbleButton.addEventListener('click', () => {
-  bubbleButton.classList.add('is-active');
-  barButton.classList.remove('is-active');
+    renderCurrentView();
+  });
 
-  renderCurrentView();
-});
+  barButton.addEventListener('click', () => {
+    barButton.classList.add('is-active');
+    bubbleButton.classList.remove('is-active');
 
-barButton.addEventListener('click', () => {
-  barButton.classList.add('is-active');
-  bubbleButton.classList.remove('is-active');
-
-  renderCurrentView();
-});
+    renderCurrentView();
+  });
 });
