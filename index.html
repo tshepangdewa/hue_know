@@ -30,9 +30,9 @@
       <p class="hero-sub">Drop in a photo and see its dominant colors broken down by name, hex code, and share of the image. Everything is processed in your browser, so nothing is ever uploaded anywhere.</p>
 
       <div class="results-toggle">
-        <button type="button" class="toggle-btn is-active" data-view="bubbles">Bubbles</button>
-        <button type="button" class="toggle-btn" data-view="bars">Bars</button>
-      </div>
+  <button type="button" class="toggle-btn is-active" data-view="bubble">Bubbles</button>
+  <button type="button" class="toggle-btn" data-view="bar">Bars</button>
+</div>
 
       <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Upload an image">
         <input type="file" id="file-input" accept="image/*" class="visually-hidden">
@@ -50,6 +50,10 @@
         </div>
       </div>
       <p class="dropzone-error" id="dropzone-error" hidden>That file doesn't look like an image. Try a JPG, PNG, or WEBP.</p>
+    <div class="results-container">
+  <div id="bubble-view"></div>
+  <div id="bar-view" hidden></div>
+</div>
     </div>
   </section>
 
@@ -148,6 +152,8 @@
 
 <script src="js/colorUtils.js" defer></script>
 <script src="js/api.js" defer></script>
+<script src="js/bubbleChart.js" defer></script>
+<script src="js/barChart.js" defer></script>
 <script src="js/main.js" defer></script>
 </body>
 </html>

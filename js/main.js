@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
       .sort((a, b) => b.percentage - a.percentage);
 
     window.currentPalette = palette;
-
+renderCurrentView();
     console.log('Extracted palette:', palette);
 
     return palette;
@@ -103,11 +103,39 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // View toggle buttons (bubbles/bars): chart rendering wired up in later steps.
-  const toggleButtons = document.querySelectorAll('.toggle-btn');
-  toggleButtons.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      toggleButtons.forEach((b) => b.classList.remove('is-active'));
-      btn.classList.add('is-active');
-    });
-  });
+  const bubbleView = document.querySelector('#bubble-view');
+const barView = document.querySelector('#bar-view');
+
+const bubbleButton = document.querySelector('[data-view="bubble"]');
+const barButton = document.querySelector('[data-view="bar"]');
+
+function renderCurrentView() {
+  const palette = window.currentPalette;
+
+  if (!palette || palette.length === 0) {
+    return;
+  }
+
+  if (bubbleButton.classList.contains('is-active')) {
+    BubbleChart.render(palette, bubbleView);
+    barView.innerHTML = '';
+  } else {
+    BarChart.render(palette, barView);
+    bubbleView.innerHTML = '';
+  }
+}
+
+bubbleButton.addEventListener('click', () => {
+  bubbleButton.classList.add('is-active');
+  barButton.classList.remove('is-active');
+
+  renderCurrentView();
+});
+
+barButton.addEventListener('click', () => {
+  barButton.classList.add('is-active');
+  bubbleButton.classList.remove('is-active');
+
+  renderCurrentView();
+});
 });
