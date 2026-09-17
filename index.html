@@ -8,6 +8,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
+
+<!-- External Libraries -->
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js"></script>
 </head>
 <body>
 
@@ -30,9 +34,9 @@
       <p class="hero-sub">Drop in a photo and see its dominant colors broken down by name, hex code, and share of the image.</p>
 
       <div class="results-toggle">
-  <button type="button" class="toggle-btn is-active" data-view="bubble">Bubbles</button>
-  <button type="button" class="toggle-btn" data-view="bar">Bars</button>
-</div>
+        <button type="button" class="toggle-btn is-active" data-view="bubble">Bubbles</button>
+        <button type="button" class="toggle-btn" data-view="bar">Bars</button>
+      </div>
 
       <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Upload an image">
         <input type="file" id="file-input" accept="image/*" class="visually-hidden">
@@ -50,13 +54,12 @@
         </div>
       </div>
       <p class="dropzone-error" id="dropzone-error" hidden>That file doesn't look like an image. Try a JPG, PNG, or WEBP.</p>
-    <p class="analysis-status" id="analysis-status" hidden>
-  Analyzing your image...
-</p>
-      <div class="results-container">
-  <div id="bubble-view"></div>
-  <div id="bar-view" hidden></div>
-</div>
+      <p class="analysis-status" id="analysis-status" hidden>Analyzing your image...</p>
+
+      <div class="results-container" style="width: 100%; max-width: 760px; margin-top: 32px;">
+        <div id="bubble-view"></div>
+        <div id="bar-view" hidden></div>
+      </div>
     </div>
   </section>
 
@@ -68,14 +71,14 @@
           <span class="step-index">1</span>
           <div>
             <h3>Upload an image</h3>
-            <<p>Choose any photo from your device to begin the color analysis.</p>
+            <p>Choose any photo from your device to begin the color analysis.</p>
           </div>
         </li>
         <li class="step">
           <span class="step-index">2</span>
           <div>
-           <h3>We analyze the colors</h3>
-<p>HueKnow analyzes the image and identifies its dominant colors and their share of the image.</p>
+            <h3>We analyze the colors</h3>
+            <p>HueKnow extracts dominant colors locally using canvas pixel quantization.</p>
           </div>
         </li>
         <li class="step">
@@ -101,16 +104,16 @@
       <h2>Why HueKnow</h2>
       <div class="feature-grid">
         <div class="feature">
-  <h3>Accurate color analysis</h3>
-  <p>HueKnow uses an image color analysis API to identify dominant colors and provide their names, hex codes, and percentages.</p>
-</div>
-       <div class="feature">
-  <h3>Instant results</h3>
-  <p>No waiting on uploads or processing queues, your palette appears the moment the image loads.</p>
-</div>
+          <h3>Accurate color analysis</h3>
+          <p>HueKnow extracts dominant colors client-side and calculates exact pixel coverage percentages.</p>
+        </div>
+        <div class="feature">
+          <h3>Instant results</h3>
+          <p>Processing happens entirely in your browser with zero network latency.</p>
+        </div>
         <div class="feature">
           <h3>No account needed</h3>
-          <p>Open the page and start. There's nothing to sign up for and nothing to remember.</p>
+          <p>Open the page and start. There's nothing to sign up for and no external API limits.</p>
         </div>
         <div class="feature">
           <h3>Two ways to view it</h3>
@@ -125,16 +128,16 @@
       <h2>Frequently asked questions</h2>
       <div class="faq-list">
         <details class="faq-item">
-         <summary>Is my image uploaded anywhere?</summary>
-<p>Yes. HueKnow sends the selected image to its server endpoint for color analysis. Your API credentials are kept securely on the server and are not exposed in the browser.</p>
+          <summary>Is my image uploaded anywhere?</summary>
+          <p>No. All color extraction takes place locally inside your web browser.</p>
         </details>
         <details class="faq-item">
           <summary>What file types are supported?</summary>
           <p>JPG, PNG, and WEBP. Transparent areas in PNGs are ignored when calculating the palette.</p>
         </details>
         <details class="faq-item">
-         <summary>How are color names decided?</summary>
-<p>HueKnow uses the color analysis service to identify a human-readable name for each dominant color alongside its exact hex code.</p>
+          <summary>How are color names decided?</summary>
+          <p>HueKnow maps RGB values to human-readable names using HSL color space analysis.</p>
         </details>
         <details class="faq-item">
           <summary>Can I use this for a design palette?</summary>

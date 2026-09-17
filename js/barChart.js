@@ -3,13 +3,8 @@ const BarChart = {
     container.innerHTML = '';
 
     const width = container.clientWidth || 700;
-    const height = Math.max(300, palette.length * 70);
-    const margin = {
-      top: 20,
-      right: 30,
-      bottom: 30,
-      left: 150
-    };
+    const height = Math.max(300, palette.length * 52);
+    const margin = { top: 20, right: 60, bottom: 30, left: 140 };
 
     const svg = d3
       .select(container)
@@ -40,7 +35,13 @@ const BarChart = {
       .attr('width', d => x(d.percentage) - margin.left)
       .attr('height', y.bandwidth())
       .attr('fill', d => d.hex)
-      .attr('rx', 6);
+      .attr('rx', 6)
+      .style('cursor', 'pointer')
+      .on('click', (event, d) => {
+        ColorUtils.copyToClipboard(d.hex).then(() => {
+          BubbleChart.showToast(`Copied ${d.hex} (${d.name}) to clipboard!`);
+        });
+      });
 
     svg
       .selectAll('.label')
@@ -52,23 +53,18 @@ const BarChart = {
       .attr('dominant-baseline', 'middle')
       .style('font-size', '13px')
       .style('font-weight', '600')
+      .style('fill', '#121212')
       .text(d => `${d.percentage.toFixed(1)}%`);
 
     svg
       .append('g')
-      .attr('transform', `translate(0, ${height - margin.bottom})`)
-      .call(
-        d3.axisBottom(x)
-          .ticks(5)
-          .tickFormat(d => `${d}%`)
-      );
-
-    svg
-      .append('g')
       .attr('transform', `translate(${margin.left}, 0)`)
-      .call(d3.axisLeft(y))
-      .selectAll('text')
-      .style('font-size', '13px');
+      .call(d3.axisLeft(y).tickSize(0))
+      .select('.domain').remove();
+
+    svg.selectAll('.tick text')
+      .style('font-size', '13px')
+      .style('font-weight', '500');
   }
 };
 

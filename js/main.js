@@ -1,6 +1,3 @@
-// main.js: event wiring and orchestration
-// Color extraction and chart rendering are wired up in later steps.
-
 document.addEventListener('DOMContentLoaded', () => {
   const dropzone = document.getElementById('dropzone');
   const fileInput = document.getElementById('file-input');
@@ -11,7 +8,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const dropzoneError = document.getElementById('dropzone-error');
   const analysisStatus = document.getElementById('analysis-status');
 
-  // Clicking/keyboard-activating the dropzone opens the file picker.
   dropzone.addEventListener('click', () => fileInput.click());
   dropzone.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' || e.key === ' ') {
@@ -20,13 +16,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Picking a file via the native dialog.
   fileInput.addEventListener('change', () => {
     const file = fileInput.files && fileInput.files[0];
     if (file) handleFile(file);
   });
 
-  // Drag and drop onto the dropzone.
   ['dragenter', 'dragover'].forEach((eventName) => {
     dropzone.addEventListener(eventName, (e) => {
       e.preventDefault();
@@ -51,7 +45,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (file) handleFile(file);
   });
 
-  // Prevent the browser from navigating to a dropped file anywhere outside the dropzone.
   ['dragover', 'drop'].forEach((eventName) => {
     window.addEventListener(eventName, (e) => e.preventDefault());
   });
@@ -81,38 +74,26 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       analysisStatus.textContent = 'Analyzing your image...';
       analysisStatus.hidden = false;
-
       dropzoneError.hidden = true;
 
       const result = await HueKnowAPI.analyzeImage(file);
 
-      const palette = result.palette
-        .sort((a, b) => b.percentage - a.percentage);
+      const palette = result.palette.sort((a, b) => b.percentage - a.percentage);
 
       if (palette.length === 0) {
         throw new Error('No colors were found in the image.');
       }
 
       window.currentPalette = palette;
-
       renderCurrentView();
 
-      console.log('Extracted palette:', palette);
-
       analysisStatus.hidden = true;
-
       return palette;
     } catch (error) {
       analysisStatus.hidden = true;
-
       console.error('Analysis failed:', error);
-
-      dropzoneError.textContent =
-        error.message || 'Something went wrong while analyzing the image.';
-
+      dropzoneError.textContent = error.message || 'Something went wrong while analyzing the image.';
       dropzoneError.hidden = false;
-
-      throw error;
     }
   }
 
@@ -122,40 +103,37 @@ document.addEventListener('DOMContentLoaded', () => {
     dropzonePreview.hidden = true;
   }
 
-  // View toggle buttons.
   const bubbleView = document.querySelector('#bubble-view');
   const barView = document.querySelector('#bar-view');
-
   const bubbleButton = document.querySelector('[data-view="bubble"]');
   const barButton = document.querySelector('[data-view="bar"]');
 
   function renderCurrentView() {
     const palette = window.currentPalette;
+    if (!palette || palette.length === 0) return;
 
-    if (!palette || palette.length === 0) {
-      return;
-    }
+    const isBubble = bubbleButton.classList.contains('is-active');
 
-    if (bubbleButton.classList.contains('is-active')) {
+    if (isBubble) {
+      bubbleView.hidden = false;
+      barView.hidden = true;
       BubbleChart.render(palette, bubbleView);
-      barView.innerHTML = '';
     } else {
+      bubbleView.hidden = true;
+      barView.hidden = false;
       BarChart.render(palette, barView);
-      bubbleView.innerHTML = '';
     }
   }
 
   bubbleButton.addEventListener('click', () => {
     bubbleButton.classList.add('is-active');
     barButton.classList.remove('is-active');
-
     renderCurrentView();
   });
 
   barButton.addEventListener('click', () => {
     barButton.classList.add('is-active');
     bubbleButton.classList.remove('is-active');
-
     renderCurrentView();
   });
 });
