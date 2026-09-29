@@ -1,6 +1,7 @@
 const MAX_SAMPLES = 15000;
 const QUANTIZATION_LEVEL = 16;
-const DELTA_E_THRESHOLD = 12;
+const DELTA_E_THRESHOLD = 18;
+const NEUTRAL_SATURATION_THRESHOLD = 12;
 const MAX_GROUPS = 3;
 
 export function extractDominantColors(
@@ -20,16 +21,19 @@ export function extractDominantColors(
     colorBins
   );
 
-  const colorGroups = groupByDeltaE(
+  const colorGroups = groupByColorSimilarity(
     representatives
   );
 
-  const totalWeight = colorGroups.reduce(
+  const mergedGroups =
+    mergeSimilarGroups(colorGroups);
+
+  const totalWeight = mergedGroups.reduce(
     (sum, group) => sum + group.weight,
     0
   );
 
-  return colorGroups
+  return mergedGroups
     .sort((a, b) => b.weight - a.weight)
     .slice(0, MAX_GROUPS)
     .map((group) => ({
@@ -138,13 +142,16 @@ function createRepresentatives(bins) {
       return {
         rgb,
         lab: rgbToLab(rgb),
+        hsl: rgbToHsl(rgb),
         weight: bin.count,
       };
     })
     .sort((a, b) => b.weight - a.weight);
 }
 
-function groupByDeltaE(representatives) {
+function groupByColorSimilarity(
+  representatives
+) {
   const groups = [];
 
   for (const color of representatives) {
@@ -167,7 +174,11 @@ function groupByDeltaE(representatives) {
 
     if (
       closestGroup &&
-      closestDistance <= DELTA_E_THRESHOLD
+      shouldMergeColors(
+        color,
+        closestGroup,
+        closestDistance
+      )
     ) {
       mergeIntoGroup(
         closestGroup,
@@ -177,12 +188,83 @@ function groupByDeltaE(representatives) {
       groups.push({
         rgb: { ...color.rgb },
         lab: { ...color.lab },
+        hsl: { ...color.hsl },
         weight: color.weight,
       });
     }
   }
 
   return groups;
+}
+
+function shouldMergeColors(
+  color,
+  group,
+  distance
+) {
+  const colorIsNeutral =
+    color.hsl.saturation <=
+    NEUTRAL_SATURATION_THRESHOLD;
+
+  const groupIsNeutral =
+    group.hsl.saturation <=
+    NEUTRAL_SATURATION_THRESHOLD;
+
+  if (colorIsNeutral && groupIsNeutral) {
+    return true;
+  }
+
+  return distance <= DELTA_E_THRESHOLD;
+}
+
+function mergeSimilarGroups(groups) {
+  const merged = [];
+
+  const sortedGroups = [...groups].sort(
+    (a, b) => b.weight - a.weight
+  );
+
+  for (const group of sortedGroups) {
+    let closestGroup = null;
+    let closestDistance = Infinity;
+
+    for (const existingGroup of merged) {
+      const distance = deltaE76(
+        group.lab,
+        existingGroup.lab
+      );
+
+      if (
+        distance < closestDistance
+      ) {
+        closestDistance = distance;
+        closestGroup = existingGroup;
+      }
+    }
+
+    if (
+      closestGroup &&
+      shouldMergeColors(
+        group,
+        closestGroup,
+        closestDistance
+      )
+    ) {
+      mergeIntoGroup(
+        closestGroup,
+        group
+      );
+    } else {
+      merged.push({
+        rgb: { ...group.rgb },
+        lab: { ...group.lab },
+        hsl: { ...group.hsl },
+        weight: group.weight,
+      });
+    }
+  }
+
+  return merged;
 }
 
 function mergeIntoGroup(
@@ -216,8 +298,77 @@ function mergeIntoGroup(
   };
 
   group.lab = rgbToLab(group.rgb);
-
+  group.hsl = rgbToHsl(group.rgb);
   group.weight = totalWeight;
+}
+
+function rgbToHsl(rgb) {
+  const red = rgb.red / 255;
+  const green = rgb.green / 255;
+  const blue = rgb.blue / 255;
+
+  const max = Math.max(
+    red,
+    green,
+    blue
+  );
+
+  const min = Math.min(
+    red,
+    green,
+    blue
+  );
+
+  const lightness =
+    (max + min) / 2;
+
+  let hue = 0;
+  let saturation = 0;
+
+  if (max !== min) {
+    const difference = max - min;
+
+    saturation =
+      lightness > 0.5
+        ? difference /
+          (2 - max - min)
+        : difference /
+          (max + min);
+
+    switch (max) {
+      case red:
+        hue =
+          (green - blue) /
+            difference +
+          (green < blue ? 6 : 0);
+        break;
+
+      case green:
+        hue =
+          (blue - red) /
+            difference +
+          2;
+        break;
+
+      case blue:
+        hue =
+          (red - green) /
+            difference +
+          4;
+        break;
+
+      default:
+        break;
+    }
+
+    hue /= 6;
+  }
+
+  return {
+    hue: hue * 360,
+    saturation: saturation * 100,
+    lightness: lightness * 100,
+  };
 }
 
 function rgbToLab(rgb) {
@@ -257,7 +408,7 @@ function rgbToLab(rgb) {
 
   const y =
     (red * 0.2126 +
-      green * 0.7152 +
+      green * 0.3576 +
       blue * 0.0722) /
     1.00000;
 
@@ -284,9 +435,14 @@ function rgbToLab(rgb) {
 }
 
 function deltaE76(lab1, lab2) {
-  const deltaL = lab1.L - lab2.L;
-  const deltaA = lab1.a - lab2.a;
-  const deltaB = lab1.b - lab2.b;
+  const deltaL =
+    lab1.L - lab2.L;
+
+  const deltaA =
+    lab1.a - lab2.a;
+
+  const deltaB =
+    lab1.b - lab2.b;
 
   return Math.sqrt(
     deltaL ** 2 +

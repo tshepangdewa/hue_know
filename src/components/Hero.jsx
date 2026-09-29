@@ -2,6 +2,7 @@ import ImageUploader from "./ImageUploader";
 import { imageToPixels } from "../utils/imageToPixels";
 import { extractDominantColors } from "../utils/colorExtractor";
 import { buildColorInfo } from "../utils/colorUtils";
+import { preparePalette } from "../utils/paletteUtils";
 
 export default function Hero() {
   const handleImageSelected = async (file) => {
@@ -19,10 +20,12 @@ export default function Hero() {
         percentage: color.percentage,
       }));
 
+      const palette = preparePalette(colorInfo);
+
       console.log("Canvas processing complete.");
       console.log("Width:", pixels.width);
       console.log("Height:", pixels.height);
-      console.log("Palette:", colorInfo);
+      console.log("Palette:", palette);
     } catch (error) {
       console.error(
         "Image processing failed:",
