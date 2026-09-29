@@ -1,17 +1,27 @@
 import ImageUploader from "./ImageUploader";
 import { imageToPixels } from "../utils/imageToPixels";
+import { extractDominantColors } from "../utils/colorExtractor";
 
 export default function Hero() {
   const handleImageSelected = async (file) => {
     try {
       const pixels = await imageToPixels(file);
 
+      const colors = extractDominantColors(
+        pixels.data,
+        pixels.width,
+        pixels.height
+      );
+
       console.log("Canvas processing complete.");
       console.log("Width:", pixels.width);
       console.log("Height:", pixels.height);
-      console.log("Pixel data:", pixels.data);
+      console.log("Dominant colors:", colors);
     } catch (error) {
-      console.error("Image processing failed:", error);
+      console.error(
+        "Image processing failed:",
+        error
+      );
     }
   };
 
@@ -29,4 +39,4 @@ export default function Hero() {
       />
     </section>
   );
-} 
+}
