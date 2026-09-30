@@ -21,7 +21,7 @@ const features = [
 export default function Features() {
   return (
     <section id="features">
-      <h2>Why hue_know?</h2>
+      <h2>Why HueKnow?</h2>
 
       <div>
         {features.map((feature) => (
