@@ -1,10 +1,12 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
+import { copyToClipboard } from "../utils/clipboard";
 
 export default function BarChart({
   palette,
 }) {
   const svgRef = useRef(null);
+  const [copiedHex, setCopiedHex] = useState("");
 
   useEffect(() => {
     if (!svgRef.current || !palette?.length) {
@@ -14,6 +16,7 @@ export default function BarChart({
     const width = 700;
     const barHeight = 64;
     const gap = 24;
+
     const height =
       palette.length * barHeight +
       (palette.length - 1) * gap;
@@ -64,6 +67,20 @@ export default function BarChart({
         "fill",
         (color) => color.hex
       )
+      .style("cursor", "pointer")
+      .on("click", async (_, color) => {
+        const copied = await copyToClipboard(
+          color.hex
+        );
+
+        if (copied) {
+          setCopiedHex(color.hex);
+
+          setTimeout(() => {
+            setCopiedHex("");
+          }, 1500);
+        }
+      })
       .transition()
       .delay((_, index) => index * 100)
       .duration(700)
@@ -83,10 +100,8 @@ export default function BarChart({
         "dominant-baseline",
         "middle"
       )
-      .attr(
-        "fill",
-        (color) =>
-          getTextColor(color.rgb)
+      .attr("fill", (color) =>
+        getTextColor(color.rgb)
       )
       .style(
         "font-family",
@@ -103,6 +118,12 @@ export default function BarChart({
   return (
     <div className="bar-chart">
       <svg ref={svgRef} />
+
+      {copiedHex && (
+        <p className="copy-feedback">
+          Copied {copiedHex}
+        </p>
+      )}
     </div>
   );
 }

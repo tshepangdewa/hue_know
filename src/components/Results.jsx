@@ -1,6 +1,7 @@
 import { useState } from "react";
 import BubbleChart from "./BubbleChart";
 import BarChart from "./BarChart";
+import ColorDetails from "./ColorDetails";
 
 export default function Results({
   palette,
@@ -62,9 +63,7 @@ export default function Results({
           onClick={() =>
             setView("bars")
           }
-          aria-pressed={
-            view === "bars"
-          }
+          aria-pressed={view === "bars"}
         >
           Bars
         </button>
@@ -81,6 +80,8 @@ export default function Results({
           />
         )}
       </div>
+
+      <ColorDetails palette={palette} />
     </section>
   );
 }

@@ -1,10 +1,12 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
+import { copyToClipboard } from "../utils/clipboard";
 
 export default function BubbleChart({
   palette,
 }) {
   const svgRef = useRef(null);
+  const [copiedHex, setCopiedHex] = useState("");
 
   useEffect(() => {
     if (!svgRef.current || !palette?.length) {
@@ -56,11 +58,20 @@ export default function BubbleChart({
         "fill",
         (node) => node.data.hex
       )
-      .attr(
-        "aria-label",
-        (node) =>
-          `${node.data.name}, ${node.data.hex}, ${node.data.percentage}%`
-      )
+      .style("cursor", "pointer")
+      .on("click", async (_, node) => {
+        const copied = await copyToClipboard(
+          node.data.hex
+        );
+
+        if (copied) {
+          setCopiedHex(node.data.hex);
+
+          setTimeout(() => {
+            setCopiedHex("");
+          }, 1500);
+        }
+      })
       .transition()
       .duration(600)
       .attr("r", (node) => node.r);
@@ -68,7 +79,10 @@ export default function BubbleChart({
     bubbles
       .append("text")
       .attr("text-anchor", "middle")
-      .attr("dominant-baseline", "middle")
+      .attr(
+        "dominant-baseline",
+        "middle"
+      )
       .attr("fill", (node) =>
         getTextColor(node.data.rgb)
       )
@@ -84,6 +98,12 @@ export default function BubbleChart({
   return (
     <div className="bubble-chart">
       <svg ref={svgRef} />
+
+      {copiedHex && (
+        <p className="copy-feedback">
+          Copied {copiedHex}
+        </p>
+      )}
     </div>
   );
 }
