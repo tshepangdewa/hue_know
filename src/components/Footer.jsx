@@ -2,8 +2,8 @@
 export default function Footer() {
   return (
     <footer>
-      <p>hue_know</p>
-      <p>Built with React, JavaScript and CSS.</p>
+      <p>HueKnow</p>
+      <p>Made by Tshepang Dewa</p>
 
       <a
         href="https://github.com"
