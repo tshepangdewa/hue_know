@@ -311,6 +311,29 @@ header nav a:hover {
   line-height: 1.7;
 }
 
+.bubble-chart {
+  width: 100%;
+  max-width: 700px;
+  margin: 32px auto 0;
+}
+
+.bubble-chart svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.bubble-chart circle {
+  stroke: var(--background);
+  stroke-width: 4px;
+}
+
+#home #results {
+  width: min(100%, 900px);
+  margin-top: 48px;
+}
+
 /* 10. FAQ */
 
 #faq {
