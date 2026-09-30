@@ -510,6 +510,48 @@ footer a:hover {
   letter-spacing: -0.5px;
 }
 
+.view-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 12px;
+  padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface-muted);
+}
+
+.view-toggle button {
+  padding: 9px 18px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 600;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.view-toggle button:hover {
+  color: var(--primary);
+}
+
+.view-toggle button.is-active {
+  background: var(--primary);
+  color: var(--background);
+}
+
+.view-toggle button:active {
+  transform: scale(0.97);
+}
+
+.results-view {
+  margin-top: 24px;
+}
+
 /* 14. ACCESSIBILITY */
 
 @media (prefers-reduced-motion: reduce) {

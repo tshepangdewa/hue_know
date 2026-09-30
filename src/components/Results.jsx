@@ -1,9 +1,12 @@
+import { useState } from "react";
 import BubbleChart from "./BubbleChart";
 import BarChart from "./BarChart";
 
 export default function Results({
   palette,
 }) {
+  const [view, setView] = useState("bubbles");
+
   if (!palette?.length) {
     return (
       <section
@@ -27,16 +30,56 @@ export default function Results({
     >
       <h2>Your color palette</h2>
 
-      <div className="results-views">
-        <div className="results-view">
-          <h3>Bubbles</h3>
-          <BubbleChart palette={palette} />
-        </div>
+      <div
+        className="view-toggle"
+        role="group"
+        aria-label="Choose palette view"
+      >
+        <button
+          type="button"
+          className={
+            view === "bubbles"
+              ? "is-active"
+              : ""
+          }
+          onClick={() =>
+            setView("bubbles")
+          }
+          aria-pressed={
+            view === "bubbles"
+          }
+        >
+          Bubbles
+        </button>
 
-        <div className="results-view">
-          <h3>Bars</h3>
-          <BarChart palette={palette} />
-        </div>
+        <button
+          type="button"
+          className={
+            view === "bars"
+              ? "is-active"
+              : ""
+          }
+          onClick={() =>
+            setView("bars")
+          }
+          aria-pressed={
+            view === "bars"
+          }
+        >
+          Bars
+        </button>
+      </div>
+
+      <div className="results-view">
+        {view === "bubbles" ? (
+          <BubbleChart
+            palette={palette}
+          />
+        ) : (
+          <BarChart
+            palette={palette}
+          />
+        )}
       </div>
     </section>
   );
