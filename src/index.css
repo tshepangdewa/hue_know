@@ -776,3 +776,16 @@ footer a:hover {
   font-size: 12px;
   font-weight: 500;
 }
+
+.processing-error {
+  width: min(100%, 640px);
+  margin: 16px 0 0;
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-muted);
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.5;
+  text-align: center;
+}

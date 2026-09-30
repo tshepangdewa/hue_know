@@ -15,10 +15,12 @@ export default function Hero({
   const [isProcessing, setIsProcessing] =
     useState(false);
 
-  const handleImageSelected = async (
-    file
-  ) => {
+  const [processingError, setProcessingError] =
+    useState("");
+
+  const handleImageSelected = async (file) => {
     setIsProcessing(true);
+    setProcessingError("");
 
     try {
       const pixels =
@@ -34,8 +36,7 @@ export default function Hero({
       const colorInfo = colors.map(
         (color) => ({
           ...buildColorInfo(color.rgb),
-          percentage:
-            color.percentage,
+          percentage: color.percentage,
         })
       );
 
@@ -43,29 +44,16 @@ export default function Hero({
         preparePalette(colorInfo);
 
       onPaletteReady(nextPalette);
-
-      console.log(
-        "Canvas processing complete."
-      );
-
-      console.log(
-        "Width:",
-        pixels.width
-      );
-
-      console.log(
-        "Height:",
-        pixels.height
-      );
-
-      console.log(
-        "Palette:",
-        nextPalette
-      );
     } catch (error) {
       console.error(
         "Image processing failed:",
         error
+      );
+
+      onPaletteReady([]);
+
+      setProcessingError(
+        "We couldn't analyze this image. Please try another image."
       );
     } finally {
       setIsProcessing(false);
@@ -84,15 +72,20 @@ export default function Hero({
       </p>
 
       <ImageUploader
-        onImageSelected={
-          handleImageSelected
-        }
+        onImageSelected={handleImageSelected}
         isProcessing={isProcessing}
       />
 
-      <Results
-        palette={palette}
-      />
+      {processingError && (
+        <p
+          className="processing-error"
+          role="alert"
+        >
+          {processingError}
+        </p>
+      )}
+
+      <Results palette={palette} />
     </section>
   );
 }
