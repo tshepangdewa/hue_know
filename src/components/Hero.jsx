@@ -1,5 +1,8 @@
+import { useState } from "react";
+
 import ImageUploader from "./ImageUploader";
 import Results from "./Results";
+
 import { imageToPixels } from "../utils/imageToPixels";
 import { extractDominantColors } from "../utils/colorExtractor";
 import { buildColorInfo } from "../utils/colorUtils";
@@ -9,51 +12,87 @@ export default function Hero({
   palette,
   onPaletteReady,
 }) {
-  const handleImageSelected = async (file) => {
-    try {
-      const pixels = await imageToPixels(file);
+  const [isProcessing, setIsProcessing] =
+    useState(false);
 
-      const colors = extractDominantColors(
-        pixels.data,
-        pixels.width,
-        pixels.height
+  const handleImageSelected = async (
+    file
+  ) => {
+    setIsProcessing(true);
+
+    try {
+      const pixels =
+        await imageToPixels(file);
+
+      const colors =
+        extractDominantColors(
+          pixels.data,
+          pixels.width,
+          pixels.height
+        );
+
+      const colorInfo = colors.map(
+        (color) => ({
+          ...buildColorInfo(color.rgb),
+          percentage:
+            color.percentage,
+        })
       );
 
-      const colorInfo = colors.map((color) => ({
-        ...buildColorInfo(color.rgb),
-        percentage: color.percentage,
-      }));
-
-      const nextPalette = preparePalette(colorInfo);
+      const nextPalette =
+        preparePalette(colorInfo);
 
       onPaletteReady(nextPalette);
 
-      console.log("Canvas processing complete.");
-      console.log("Width:", pixels.width);
-      console.log("Height:", pixels.height);
-      console.log("Palette:", nextPalette);
+      console.log(
+        "Canvas processing complete."
+      );
+
+      console.log(
+        "Width:",
+        pixels.width
+      );
+
+      console.log(
+        "Height:",
+        pixels.height
+      );
+
+      console.log(
+        "Palette:",
+        nextPalette
+      );
     } catch (error) {
       console.error(
         "Image processing failed:",
         error
       );
+    } finally {
+      setIsProcessing(false);
     }
   };
 
   return (
     <section id="home">
-      <h1>Every image has a palette.</h1>
+      <h1>
+        Every image has a palette.
+      </h1>
 
       <p>
-        Upload an image and discover its three
-        dominant colors in seconds.
+        Upload an image and discover its
+        three dominant colors in seconds.
       </p>
 
       <ImageUploader
-        onImageSelected={handleImageSelected}
+        onImageSelected={
+          handleImageSelected
+        }
+        isProcessing={isProcessing}
       />
 
-      <Results palette={palette} />
+      <Results
+        palette={palette}
+      />
     </section>
   );
 }

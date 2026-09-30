@@ -7,12 +7,20 @@ const SUPPORTED_TYPES = [
   "image/gif",
 ];
 
-export default function ImageUploader({ onImageSelected }) {
+export default function ImageUploader({
+  onImageSelected,
+  isProcessing,
+}) {
   const inputRef = useRef(null);
 
-  const [previewUrl, setPreviewUrl] = useState("");
-  const [error, setError] = useState("");
-  const [isDragging, setIsDragging] = useState(false);
+  const [previewUrl, setPreviewUrl] =
+    useState("");
+
+  const [error, setError] =
+    useState("");
+
+  const [isDragging, setIsDragging] =
+    useState(false);
 
   const handleFile = (file) => {
     setError("");
@@ -22,8 +30,15 @@ export default function ImageUploader({ onImageSelected }) {
     }
 
     if (!SUPPORTED_TYPES.includes(file.type)) {
-      setError("Please choose a JPG, PNG, WebP, or GIF image.");
+      setError(
+        "Please choose a JPG, PNG, WebP, or GIF image."
+      );
+
       return;
+    }
+
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
     }
 
     const url = URL.createObjectURL(file);
@@ -34,9 +49,13 @@ export default function ImageUploader({ onImageSelected }) {
   };
 
   const handleFileInput = (event) => {
-    const file = event.target.files?.[0];
+    const file =
+      event.target.files?.[0];
 
     handleFile(file);
+
+    // Allows the same file to be selected again.
+    event.target.value = "";
   };
 
   const handleDragOver = (event) => {
@@ -53,7 +72,8 @@ export default function ImageUploader({ onImageSelected }) {
     event.preventDefault();
     setIsDragging(false);
 
-    const file = event.dataTransfer.files?.[0];
+    const file =
+      event.dataTransfer.files?.[0];
 
     handleFile(file);
   };
@@ -89,21 +109,33 @@ export default function ImageUploader({ onImageSelected }) {
 
       {previewUrl ? (
         <div className="image-preview">
-          <img src={previewUrl} alt="Selected image preview" />
+          <img
+            src={previewUrl}
+            alt="Selected image preview"
+          />
 
-          <button
-            type="button"
-            onClick={handleChooseClick}
-          >
-            Choose another image
-          </button>
+          {isProcessing ? (
+            <p className="processing-message">
+              Analyzing your image...
+            </p>
+          ) : (
+            <button
+              type="button"
+              onClick={handleChooseClick}
+            >
+              Choose another image
+            </button>
+          )}
         </div>
       ) : (
         <div className="upload-empty">
-          <h2>Drop your image here</h2>
+          <h2>
+            Drop your image here
+          </h2>
 
           <p>
-            Drag and drop an image anywhere in this box.
+            Drag and drop an image anywhere
+            in this box.
           </p>
 
           <button
@@ -120,7 +152,10 @@ export default function ImageUploader({ onImageSelected }) {
       )}
 
       {error && (
-        <p className="upload-error" role="alert">
+        <p
+          className="upload-error"
+          role="alert"
+        >
           {error}
         </p>
       )}
