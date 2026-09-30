@@ -451,10 +451,6 @@ footer a:hover {
     font-size: 16px;
   }
 
-  #home > div {
-    padding: 48px 20px;
-  }
-
   #how-it-works ol,
   #features > div {
     grid-template-columns: 1fr;
@@ -530,19 +526,6 @@ footer a:hover {
   overflow: visible;
 }
 
-.results-views {
-  display: flex;
-  flex-direction: column;
-  gap: 64px;
-  margin-top: 48px;
-}
-
-.results-view h3 {
-  margin: 0;
-  font-size: 20px;
-  font-weight: 600;
-  letter-spacing: -0.5px;
-}
 
 .view-toggle {
   display: inline-flex;
