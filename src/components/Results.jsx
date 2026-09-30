@@ -1,4 +1,5 @@
 import BubbleChart from "./BubbleChart";
+import BarChart from "./BarChart";
 
 export default function Results({
   palette,
@@ -26,7 +27,17 @@ export default function Results({
     >
       <h2>Your color palette</h2>
 
-      <BubbleChart palette={palette} />
+      <div className="results-views">
+        <div className="results-view">
+          <h3>Bubbles</h3>
+          <BubbleChart palette={palette} />
+        </div>
+
+        <div className="results-view">
+          <h3>Bars</h3>
+          <BarChart palette={palette} />
+        </div>
+      </div>
     </section>
   );
 }
