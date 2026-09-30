@@ -6,7 +6,7 @@ export default function Footer() {
       <p>Made by Tshepang Dewa</p>
 
       <a
-        href="https://github.com"
+        href="https://github.com/tshepangdewa/hue_know"
         target="_blank"
         rel="noopener noreferrer"
       >
