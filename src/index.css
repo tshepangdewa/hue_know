@@ -433,14 +433,7 @@ footer a:hover {
   flex: 1;
 }
 
-   .color-details {
-    display: flex;
-    flex-direction: row;
-    gap: 12px;
-    margin-top: 32px;
-  }
-
-  header nav {
+header nav {
     justify-content: center;
     gap: 18px;
   }
@@ -500,9 +493,11 @@ footer a:hover {
   }
 
   .color-details {
-    gap: 12px;
-    margin-top: 32px;
-  }
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-top: 32px;
+}
 
   .color-detail {
     padding: 16px;
