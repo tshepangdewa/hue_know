@@ -105,10 +105,25 @@ header {
   background: var(--background);
 }
 
-header > a {
+/* Brand logo and name */
+
+header .brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+
   font-size: 26px;
   font-weight: 700;
   letter-spacing: -1.4px;
+}
+
+header .brand-icon {
+  display: block;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  object-fit: contain;
 }
 
 header nav {
