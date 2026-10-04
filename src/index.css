@@ -433,9 +433,12 @@ footer a:hover {
   flex: 1;
 }
 
-  .color-details {
-  grid-template-columns: 1fr;
-}
+   .color-details {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 32px;
+  }
 
   header nav {
     justify-content: center;
