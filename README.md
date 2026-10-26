@@ -1,96 +1,74 @@
-```
-# HueKnow: Project Description and Technical Overview
+HueKnow: Project Description and Technical Overview
 
-## 1. Introduction
+Introduction
 
-HueKnow is a web application that extracts the three dominant colours from an image. It helps users identify the main colours in photographs, graphics, and other images without having to select them manually. The application displays the extracted colours in a palette, including each colour's name, HEX code, RGB values, and approximate percentage of the image it represents.
+HueKnow is a web application that extracts the three most dominant colours from an uploaded image. It is designed for people who need to identify colours for website development, graphic design, photography, art, and other creative projects. Users can upload an image, view its main colours, explore their colour codes, and copy those codes for use elsewhere. The application does not require users to create an account or log in.
 
-The main goal of HueKnow is to provide a simple, fast, and accessible tool for people who need colour information for website design, graphic design, digital art, and other creative projects. Users do not need to create an account or install additional software to use the application.
+How the Application Works
 
-## 2. How the Application Works
+When a user opens HueKnow, they see an upload area where they can select an image from their device or drag and drop it into the application. Supported image formats include JPEG, PNG, WebP, and GIF, subject to the implementation.
 
-The process begins when a user opens HueKnow and selects an image from their device. They can click the upload button or drag and drop an image into the upload area. The application supports common image formats, including JPG, PNG, WebP, and GIF. Once an image is selected, HueKnow displays a preview and begins processing it.
+After an image is selected, HueKnow creates a preview and prepares the image for processing. JavaScript loads the image into an HTML Canvas element. Canvas allows the application to access the image's individual pixels and their colour values. Large images are resized before analysis to reduce processing time and memory use.
 
-The application uses JavaScript and the browser's Canvas API to analyse the image. First, it loads the image and creates a smaller version with a maximum dimension of 600 pixels. This reduces the amount of data that must be processed, helping the application work faster and use less memory. The image is then drawn onto a canvas, allowing JavaScript to access its individual pixel values.
+The application samples pixels from the image instead of analysing every pixel in a large image. It groups similar colours together and estimates which colours appear most frequently. It then identifies the three dominant colours and calculates their approximate percentages in the sampled image.
 
-Each pixel contains red, green, blue, and alpha values. HueKnow samples a limited number of pixels rather than examining every pixel individually. It groups similar colours together, calculates the relative weight of each group, and selects up to three dominant colour groups. The algorithm uses colour conversion and colour-distance calculations to help identify similar shades.
+The results appear in an interactive palette. Users can switch between bubble and bar chart views. The bubble chart represents colours with circles, while the bar chart uses bars to show their relative proportions. Selecting a colour displays information such as its name, HEX code, RGB values, and estimated percentage. Users can copy HEX codes using the browser's Clipboard API and paste them into code editors or design applications.
 
-After extraction, the application converts the selected colours into useful formats. These include HEX codes, RGB values, HSL values, and approximate human-readable colour names. It also calculates the estimated percentage represented by each colour group.
+Technology Stack
 
-The results are displayed in two visual formats. The bubble view uses circles of different sizes to represent the relative importance of each colour. The bar view uses horizontal bars to communicate the same information. Users can switch between the views and copy HEX codes to their clipboard.
+HueKnow uses HTML, CSS, JavaScript, React, Vite, and D3.js. HTML defines the page structure, while CSS controls the layout, colours, spacing, typography, and responsive design. JavaScript handles image processing and the application's functionality.
 
-## 3. Technology Stack
+React divides the interface into reusable components. It also manages application state, allowing the results to update when a user uploads another image or changes the chart view. Vite provides the development server and builds the application files for production. D3.js creates the interactive charts. The Canvas API reads image pixels, and browser file and clipboard APIs support image selection, previews, and copying colour codes.
 
-HueKnow uses several technologies that work together to provide the complete experience.
+Actual Project Folder Structure
 
-- HTML: Provides the basic structure of the webpage.
-- CSS: Controls the design, layout, colours, typography, spacing, responsiveness, and interactive states.
-- JavaScript: Handles image processing, colour calculations, file validation, and clipboard operations.
-- React: Builds the interface using reusable components and manages application state.
-- Vite: Provides the development server and creates the optimised production build.
-- D3.js: Creates the bubble and bar charts using SVG graphics.
-- Canvas API: Allows the application to draw images and read their pixel data.
-- Browser File and Clipboard APIs: Support local image handling and copying HEX codes.
+The following is the intended source structure based on the project details. It should be compared with the current local project folder to confirm every filename.
 
-These technologies allow HueKnow to operate primarily within the user's browser without requiring a dedicated application server.
-
-## 4. Project Folder Structure
-
-The project is organised into folders to make the code easier to understand, maintain, and expand.
-
-```
 hue_know/
-├── public/
-│   ├── favicon.svg
-│   └── icons/
-│       ├── github.svg
-│       ├── instagram.svg
-│       └── linkedin.svg
-├── src/
-│   ├── components/
-│   │   ├── Header.jsx
-│   │   ├── Hero.jsx
-│   │   ├── ImageUploader.jsx
-│   │   ├── Results.jsx
-│   │   ├── BubbleChart.jsx
-│   │   ├── BarChart.jsx
-│   │   ├── ColorDetails.jsx
-│   │   ├── HowItWorks.jsx
-│   │   ├── Features.jsx
-│   │   ├── FAQ.jsx
-│   │   └── Footer.jsx
-│   ├── utils/
-│   │   ├── imageToPixels.js
-│   │   ├── colorExtractor.js
-│   │   ├── colorUtils.js
-│   │   ├── paletteUtils.js
-│   │   └── clipboard.js
-│   ├── App.jsx
-│   └── index.css
-├── index.html
-├── package.json
-└── vite.config.js
-```
+    public/
+        favicon.svg
+        icons/
+            github.svg
+            instagram.svg
+            linkedin.svg
+    src/
+        components/
+            Header.jsx
+            Hero.jsx
+            ImageUploader.jsx
+            Results.jsx
+            BubbleChart.jsx
+            BarChart.jsx
+            ColorDetails.jsx
+            HowItWorks.jsx
+            Features.jsx
+            FAQ.jsx
+        utils/
+            imageToPixels.js
+            colorExtractor.js
+            colorUtils.js
+            paletteUtils.js
+            clipboard.js
+        App.jsx
+        index.css
+    index.html
+    package.json
+    vite.config.js
 
-The `components` folder contains the different parts of the interface. For example, `ImageUploader.jsx` manages image selection, `Results.jsx` controls the results display, and the chart components visualise the extracted colours.
+The public folder contains static resources, including the favicon and social media icons. The src folder contains the main application code. Its components folder holds the different interface sections, including the uploader, charts, results, and colour information. The utils folder contains helper functions for reading image pixels, extracting colours, converting colour values, preparing the palette, and copying text.
 
-The `utils` folder contains the main processing functions. `imageToPixels.js` converts images into pixel data, while `colorExtractor.js` identifies dominant colours. `colorUtils.js` calculates colour formats and names, `paletteUtils.js` prepares the results, and `clipboard.js` handles copying HEX codes.
+App.jsx connects the main components and manages shared state. The index.css file contains the application's styling. The index.html file provides the webpage entry point and metadata. The package.json file defines dependencies and scripts, while vite.config.js contains Vite's configuration.
 
-`App.jsx` brings the components together, while `index.css` contains the application's styling. The `public` folder stores static assets, including the favicon and social media icons.
+Hosting and Deployment
 
-## 5. Hosting and Deployment
+HueKnow can be deployed using Vercel, a platform for hosting frontend applications. The project can be connected to a Git repository, allowing Vercel to build and deploy the website. With the appropriate configuration, updates pushed to the repository can trigger new deployments.
 
-HueKnow is designed for deployment on Vercel, a platform that hosts web applications. During development, the command `npm run dev` starts the local development server. When the application is ready, `npm run build` creates an optimised production version inside the `dist` folder.
+Since the main image-processing work happens in the browser, HueKnow does not need a dedicated backend server or database for its core features. Vercel serves the application files, and the user's browser runs the JavaScript. The actual build command, output directory, and deployment status should be verified in the project's Vercel settings.
 
-Vercel can build the project and serve these static files to website visitors. The expected configuration uses `npm run build` as the build command and `dist` as the output directory.
+Privacy and Limitations
 
-Because HueKnow does not currently require a backend, database, authentication system, or external colour-analysis API, its hosting requirements are relatively simple. A successful local build should still be followed by checking the deployed website, its assets, and its functionality.
+HueKnow is designed to process images locally in the browser rather than sending them to a remote colour-analysis service. This reduces the need to transfer image data elsewhere. Its accuracy depends on pixel sampling and colour grouping, so the results are estimates rather than guaranteed exact measurements.
 
-## 6. Privacy and Future Improvements
+Conclusion
 
-HueKnow processes images locally in the browser. The selected image does not need to be sent to a HueKnow server, which reduces infrastructure requirements and improves privacy. However, the application still needs an internet connection to load the hosted website and any externally hosted assets.
-
-Future improvements could include automated testing, more accurate colour grouping, better handling of very large images, and options to export or save palettes.
-
-Overall, HueKnow combines frontend development, image processing, colour analysis, and interactive visualisation to make discovering and reusing image colours straightforward.
-```
+HueKnow combines image processing, colour analysis, and interactive visualisation in a simple web application. React manages the interface, JavaScript analyses image pixels, D3.js displays the results, and Vite prepares the project for deployment. Hosting through Vercel makes the application accessible through a web browser without requiring users to install software.
